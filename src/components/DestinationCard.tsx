@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, ArrowRight } from 'lucide-react';
 
 interface DestinationCardProps {
   destination: {
@@ -9,7 +9,7 @@ interface DestinationCardProps {
     name: string;
     location: string;
     rating: number;
-    price: string;
+    price?: string; // Making price optional since we're removing it
     isFavorite?: boolean;
   };
 }
@@ -20,7 +20,7 @@ const DestinationCard = ({ destination }: DestinationCardProps) => {
   
   return (
     <div 
-      className="group relative rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+      className="group relative rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -31,7 +31,7 @@ const DestinationCard = ({ destination }: DestinationCardProps) => {
           alt={destination.name}
           className={`w-full h-full object-cover transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
       </div>
       
       {/* Favorite Button */}
@@ -49,19 +49,15 @@ const DestinationCard = ({ destination }: DestinationCardProps) => {
             <h3 className="font-display font-semibold text-lg">{destination.name}</h3>
             <p className="text-sm text-white/80">{destination.location}</p>
           </div>
-          <div className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md">
+          <div className="flex items-center space-x-1 bg-primary/30 backdrop-blur-sm px-2 py-1 rounded-md">
             <Star size={14} className="fill-yellow-400 text-yellow-400" />
             <span className="text-sm font-medium">{destination.rating}</span>
           </div>
         </div>
         
-        <div className="mt-2 pt-2 border-t border-white/20 flex justify-between items-center">
-          <div>
-            <span className="text-sm font-display">From</span>
-            <span className="ml-1 font-display font-semibold">{destination.price}</span>
-          </div>
-          <button className="text-xs font-medium bg-white text-primary px-3 py-1.5 rounded-full hover:bg-primary hover:text-white transition-colors">
-            View Details
+        <div className="mt-3 pt-2 border-t border-white/20 flex justify-end items-center">
+          <button className="text-xs font-medium bg-white/20 backdrop-blur-sm hover:bg-primary hover:text-white transition-colors px-3 py-1.5 rounded-full flex items-center gap-1">
+            Explore <ArrowRight size={12} />
           </button>
         </div>
       </div>

@@ -16,24 +16,27 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
     
-    --primary: 196 100% 47%;
+    /* Vibrant primary color - Purple */
+    --primary: 262 83% 58%;
     --primary-foreground: 210 40% 98%;
     
-    --secondary: 210 40% 96%;
+    /* Lighter secondary */
+    --secondary: 263 70% 95%;
     --secondary-foreground: 222 47% 11%;
+    
+    /* More colorful accent */
+    --accent: 280 90% 92%;
+    --accent-foreground: 222 47% 11%;
     
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-    
-    --accent: 196 80% 94%;
-    --accent-foreground: 222 47% 11%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
     
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 196 100% 47%;
+    --ring: 262 83% 58%;
     
     --radius: 1rem;
   }
@@ -59,6 +62,10 @@
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
   }
   
+  .neo-glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/30 shadow-xl;
+  }
+  
   .container-padding {
     @apply px-6 md:px-8 lg:px-12;
   }
@@ -72,15 +79,23 @@
   }
   
   .search-input {
-    @apply w-full px-4 py-3 bg-white rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary shadow-sm transition-all duration-200;
+    @apply w-full px-4 py-3 bg-white/80 backdrop-blur-sm rounded-xl border border-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary shadow-md transition-all duration-200;
   }
   
   .btn-hover {
-    @apply hover:shadow-md hover:-translate-y-0.5 transition-all duration-200;
+    @apply hover:shadow-lg hover:-translate-y-1 transition-all duration-200;
   }
   
   .btn-primary {
     @apply bg-primary text-white rounded-full font-medium px-6 py-3 shadow-md btn-hover;
+  }
+  
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary to-purple-500 text-white rounded-full font-medium px-6 py-3 shadow-lg hover:shadow-primary/20 btn-hover;
+  }
+  
+  .btn-outline-gradient {
+    @apply bg-white/10 backdrop-blur-sm border border-primary/30 text-foreground rounded-full font-medium px-6 py-3 hover:bg-primary/10 btn-hover;
   }
   
   .btn-secondary {
@@ -89,6 +104,10 @@
   
   .btn-outline {
     @apply bg-transparent border border-border text-foreground rounded-full font-medium px-6 py-3 btn-hover;
+  }
+  
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent;
   }
 }
 
@@ -103,11 +122,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted rounded-full;
+  @apply bg-primary/20 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/30;
+  @apply bg-primary/40;
 }
 
 /* Page transitions */
@@ -131,4 +150,24 @@
   opacity: 0;
   transform: translateY(-8px);
   transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Animation utilities */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
 }

@@ -56,7 +56,7 @@ const TripPostCard = ({ trip, onLike, onAddComment }: TripPostCardProps) => {
     });
   };
 
-  const handleSubmitComment = (e) => {
+  const handleSubmitComment = (e: React.FormEvent) => {
     e.preventDefault();
     if (comment.trim()) {
       onAddComment(trip.id, comment);
@@ -64,8 +64,12 @@ const TripPostCard = ({ trip, onLike, onAddComment }: TripPostCardProps) => {
     }
   };
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 

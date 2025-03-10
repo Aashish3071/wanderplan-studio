@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -101,7 +100,7 @@ const Index = () => {
     {
       icon: DollarSign,
       title: 'Smart Budget Tracking',
-      description: 'Track expenses and get alerts when you're approaching your budget limits.',
+      description: 'Track expenses and get alerts when you\'re approaching your budget limits.',
     },
     {
       icon: Users,

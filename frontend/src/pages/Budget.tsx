@@ -3,7 +3,12 @@ import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BudgetTracker from '../components/BudgetTracker';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { PlusCircle, MinusCircle, DollarSign, RefreshCw, Download, Filter } from 'lucide-react';
+import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface Expense {
   id: string;
@@ -38,20 +43,13 @@ const Budget = () => {
     },
     {
       id: '4',
-      date: '2023-12-01',
-      category: 'Activities',
-      description: 'Louvre Museum',
-      amount: 17,
-    },
-    {
-      id: '5',
       date: '2023-12-02',
       category: 'Transportation',
       description: 'Metro Pass',
       amount: 15,
     },
     {
-      id: '6',
+      id: '5',
       date: '2023-12-02',
       category: 'Activities',
       description: 'Seine River Cruise',
@@ -100,37 +98,41 @@ const Budget = () => {
   
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   
+  const handleAddExpense = () => {
+    toast.success("Expense added successfully!");
+  };
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow pt-20">
+      <main className="flex-grow pt-8">
         {/* Budget Header */}
-        <section className="bg-secondary/50 py-10">
-          <div className="container mx-auto container-padding">
+        <section className="bg-secondary/50 py-8">
+          <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
               <div>
                 <span className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
                   Budget Management
                 </span>
-                <h1 className="text-3xl font-display font-bold mt-2">Paris Getaway</h1>
+                <h1 className="text-3xl font-bold mt-2">Trip Budget</h1>
                 <p className="text-muted-foreground">Track and manage your trip expenses</p>
               </div>
               
               <div className="flex gap-3 mt-4 md:mt-0">
-                <button className="btn-outline flex items-center text-sm py-2">
-                  <Download size={16} className="mr-2" /> Export
-                </button>
-                <button className="btn-primary flex items-center text-sm py-2">
-                  <PlusCircle size={16} className="mr-2" /> Add Expense
-                </button>
+                <Button variant="outline" size="sm" className="flex items-center">
+                  <Download className="mr-2 h-4 w-4" /> Export
+                </Button>
+                <Button size="sm" className="flex items-center" onClick={handleAddExpense}>
+                  <PlusCircle className="mr-2 h-4 w-4" /> Add Expense
+                </Button>
               </div>
             </div>
           </div>
         </section>
         
         {/* Budget Content */}
-        <section className="py-10 container mx-auto container-padding">
+        <section className="py-8 container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Budget Overview */}
             <div className="lg:col-span-1">
@@ -139,118 +141,111 @@ const Budget = () => {
             
             {/* Expenses List */}
             <div className="lg:col-span-2">
-              <div className="glass-card rounded-xl p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="font-display text-xl font-semibold">Expenses</h2>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>Expenses</CardTitle>
                   <div className="flex items-center space-x-2">
-                    <button className="p-2 rounded-lg hover:bg-muted/50 text-muted-foreground">
-                      <RefreshCw size={16} />
-                    </button>
-                    <div className="relative">
-                      <button className="p-2 rounded-lg hover:bg-muted/50 text-muted-foreground">
-                        <Filter size={16} />
-                      </button>
+                    <Button variant="ghost" size="icon">
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                      <Filter className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* Filter and Sort */}
+                  <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
+                    <div className="flex space-x-2 overflow-x-auto pb-2">
+                      <Button 
+                        variant={filter === 'all' ? 'default' : 'outline'} 
+                        size="sm"
+                        onClick={() => setFilter('all')}
+                      >
+                        All Categories
+                      </Button>
+                      {Object.keys(categoryColors).map((category) => (
+                        <Button 
+                          key={category}
+                          variant={filter === category ? 'default' : 'outline'} 
+                          size="sm"
+                          onClick={() => setFilter(category)}
+                        >
+                          {category}
+                        </Button>
+                      ))}
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-muted-foreground">Sort by:</span>
+                      <select 
+                        className="bg-background border border-input rounded-md p-1.5 text-sm"
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                      >
+                        <option value="date">Date</option>
+                        <option value="amount">Amount</option>
+                      </select>
                     </div>
                   </div>
-                </div>
-                
-                {/* Filter and Sort */}
-                <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
-                  <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-none">
-                    <button 
-                      className={`px-3 py-1.5 rounded-lg text-sm whitespace-nowrap ${
-                        filter === 'all' 
-                          ? 'bg-primary text-white' 
-                          : 'bg-secondary text-foreground'
-                      }`}
-                      onClick={() => setFilter('all')}
-                    >
-                      All Categories
-                    </button>
-                    {Object.keys(categoryColors).map((category) => (
-                      <button 
-                        key={category}
-                        className={`px-3 py-1.5 rounded-lg text-sm whitespace-nowrap ${
-                          filter === category
-                            ? 'bg-primary text-white' 
-                            : 'bg-secondary text-foreground'
-                        }`}
-                        onClick={() => setFilter(category)}
-                      >
-                        {category}
-                      </button>
-                    ))}
+                  
+                  {/* Expenses Table */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="text-left border-b">
+                          <th className="pb-3 font-medium text-muted-foreground text-sm">Date</th>
+                          <th className="pb-3 font-medium text-muted-foreground text-sm">Category</th>
+                          <th className="pb-3 font-medium text-muted-foreground text-sm">Description</th>
+                          <th className="pb-3 font-medium text-muted-foreground text-sm text-right">Amount</th>
+                          <th className="pb-3 font-medium text-muted-foreground text-sm text-center">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sortedExpenses.map((expense) => (
+                          <tr key={expense.id} className="border-b">
+                            <td className="py-3 text-sm">{formatDate(expense.date)}</td>
+                            <td className="py-3">
+                              <span 
+                                className={`px-2 py-1 text-xs rounded-full ${
+                                  categoryColors[expense.category as keyof typeof categoryColors]
+                                }`}
+                              >
+                                {expense.category}
+                              </span>
+                            </td>
+                            <td className="py-3 text-sm">{expense.description}</td>
+                            <td className="py-3 text-sm font-medium text-right">
+                              {formatCurrency(expense.amount)}
+                            </td>
+                            <td className="py-3 flex justify-center">
+                              <Button variant="ghost" size="icon">
+                                <MinusCircle className="h-4 w-4" />
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr className="border-t">
+                          <td colSpan={3} className="py-3 text-sm font-medium">Total</td>
+                          <td className="py-3 text-right font-bold">{formatCurrency(totalExpenses)}</td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm text-muted-foreground">Sort by:</span>
-                    <select 
-                      className="bg-muted/30 border border-border rounded-lg p-1.5 text-sm"
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                    >
-                      <option value="date">Date</option>
-                      <option value="amount">Amount</option>
-                    </select>
-                  </div>
-                </div>
-                
-                {/* Expenses Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[600px]">
-                    <thead>
-                      <tr className="text-left border-b border-border">
-                        <th className="pb-3 font-medium text-muted-foreground text-sm">Date</th>
-                        <th className="pb-3 font-medium text-muted-foreground text-sm">Category</th>
-                        <th className="pb-3 font-medium text-muted-foreground text-sm">Description</th>
-                        <th className="pb-3 font-medium text-muted-foreground text-sm text-right">Amount</th>
-                        <th className="pb-3 font-medium text-muted-foreground text-sm text-center">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sortedExpenses.map((expense) => (
-                        <tr key={expense.id} className="border-b border-border/50">
-                          <td className="py-3 text-sm">{formatDate(expense.date)}</td>
-                          <td className="py-3">
-                            <span 
-                              className={`px-2 py-1 text-xs rounded-full ${
-                                categoryColors[expense.category as keyof typeof categoryColors]
-                              }`}
-                            >
-                              {expense.category}
-                            </span>
-                          </td>
-                          <td className="py-3 text-sm">{expense.description}</td>
-                          <td className="py-3 text-sm font-medium text-right">
-                            {formatCurrency(expense.amount)}
-                          </td>
-                          <td className="py-3 flex justify-center space-x-1">
-                            <button className="p-1.5 rounded-full hover:bg-muted/70 text-muted-foreground">
-                              <MinusCircle size={16} />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                    <tfoot>
-                      <tr className="border-t border-border">
-                        <td colSpan={3} className="py-3 text-sm font-medium">Total</td>
-                        <td className="py-3 text-right font-bold">{formatCurrency(totalExpenses)}</td>
-                        <td></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                
-                {sortedExpenses.length === 0 && (
-                  <div className="text-center py-10">
-                    <DollarSign size={32} className="mx-auto text-muted-foreground mb-2" />
-                    <p className="text-muted-foreground">
-                      No expenses found for the selected filter.
-                    </p>
-                  </div>
-                )}
-              </div>
+                  {sortedExpenses.length === 0 && (
+                    <div className="text-center py-10">
+                      <DollarSign className="mx-auto text-muted-foreground mb-2 h-10 w-10" />
+                      <p className="text-muted-foreground">
+                        No expenses found for the selected filter.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>

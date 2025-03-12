@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import PlanTrip from "./pages/PlanTrip";
 import ItineraryDetail from "./pages/ItineraryDetail";
 import LocalInsights from "./pages/LocalInsights";
+import Budget from "./pages/Budget";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/plan-trip" element={<PlanTrip />} />
           <Route path="/itinerary/:id" element={<ItineraryDetail />} />
           <Route path="/local-insights" element={<LocalInsights />} />
+          <Route path="/budget" element={<Budget />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

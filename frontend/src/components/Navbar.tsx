@@ -45,6 +45,13 @@ const Navbar = () => {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
+              <Link to="/budget" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Budget
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
               <Link to="/local-insights" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Local Insights
@@ -104,6 +111,13 @@ const Navbar = () => {
                   <Link to="/dashboard">
                     <Button variant="ghost" className="w-full justify-start">
                       Dashboard
+                    </Button>
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/budget">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Budget
                     </Button>
                   </Link>
                 </SheetClose>

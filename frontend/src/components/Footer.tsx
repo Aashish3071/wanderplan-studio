@@ -1,108 +1,91 @@
 
-import { Link } from 'react-router-dom';
-import { MapPin, Mail, Phone, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-secondary/50 border-t border-border">
-      <div className="container mx-auto container-padding py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl font-display font-bold text-primary">TripGenius</span>
-            </Link>
-            <p className="text-muted-foreground max-w-xs">
-              AI-powered trip planning platform that simplifies travel preparation with personalized itineraries.
+    <footer className="bg-background border-t">
+      <div className="container mx-auto py-8 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 className="text-lg font-bold mb-4">WanderPlan</h3>
+            <p className="text-muted-foreground text-sm">
+              Your AI-powered travel planning companion that makes trip organization simple and enjoyable.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-foreground/70 hover:text-primary transition-colors">
-                <Facebook size={18} />
-              </a>
-              <a href="#" className="text-foreground/70 hover:text-primary transition-colors">
-                <Twitter size={18} />
-              </a>
-              <a href="#" className="text-foreground/70 hover:text-primary transition-colors">
-                <Instagram size={18} />
-              </a>
-              <a href="#" className="text-foreground/70 hover:text-primary transition-colors">
-                <Linkedin size={18} />
-              </a>
-            </div>
           </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="font-display font-semibold text-foreground">Quick Links</h3>
+          
+          <div>
+            <h4 className="font-medium mb-4">Pages</h4>
             <ul className="space-y-2">
-              {['Home', 'About Us', 'Features', 'Pricing', 'Blog'].map((item) => (
-                <li key={item}>
-                  <Link 
-                    to="#" 
-                    className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/plan-trip" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Plan a Trip
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/budget" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Budget
+                </Link>
+              </li>
             </ul>
           </div>
-
-          {/* Support */}
-          <div className="space-y-4">
-            <h3 className="font-display font-semibold text-foreground">Support</h3>
+          
+          <div>
+            <h4 className="font-medium mb-4">Community</h4>
             <ul className="space-y-2">
-              {['FAQ', 'Contact Us', 'Privacy Policy', 'Terms of Service', 'Refund Policy'].map((item) => (
-                <li key={item}>
-                  <Link 
-                    to="#" 
-                    className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link to="/community" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Explore Trips
+                </Link>
+              </li>
+              <li>
+                <Link to="/local-insights" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Local Insights
+                </Link>
+              </li>
             </ul>
           </div>
-
-          {/* Contact */}
-          <div className="space-y-4">
-            <h3 className="font-display font-semibold text-foreground">Contact Us</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-primary mt-0.5" />
-                <span className="text-muted-foreground">123 Travel Avenue, Wanderlust City, 10001</span>
+          
+          <div>
+            <h4 className="font-medium mb-4">Legal</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Terms of Service
+                </Link>
               </li>
-              <li className="flex items-center gap-3">
-                <Mail size={18} className="text-primary" />
-                <a href="mailto:info@tripgenius.com" className="text-muted-foreground hover:text-primary transition-colors">
-                  info@tripgenius.com
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone size={18} className="text-primary" />
-                <a href="tel:+123456789" className="text-muted-foreground hover:text-primary transition-colors">
-                  +1 (234) 567-890
-                </a>
+              <li>
+                <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Privacy Policy
+                </Link>
               </li>
             </ul>
           </div>
         </div>
-
-        <div className="mt-12 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} TripGenius. All rights reserved.
+        
+        <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} WanderPlan. All rights reserved.
           </p>
-          <div className="mt-4 md:mt-0 flex space-x-6">
-            <Link to="#" className="text-muted-foreground text-sm hover:text-primary transition-colors">
-              Privacy Policy
-            </Link>
-            <Link to="#" className="text-muted-foreground text-sm hover:text-primary transition-colors">
-              Terms of Service
-            </Link>
-            <Link to="#" className="text-muted-foreground text-sm hover:text-primary transition-colors">
-              Cookie Policy
-            </Link>
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            <a href="#" className="text-muted-foreground hover:text-foreground">
+              Twitter
+            </a>
+            <a href="#" className="text-muted-foreground hover:text-foreground">
+              Facebook
+            </a>
+            <a href="#" className="text-muted-foreground hover:text-foreground">
+              Instagram
+            </a>
           </div>
         </div>
       </div>

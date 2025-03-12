@@ -1,331 +1,237 @@
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, Search, CloudRain, Thermometer, Wind, Umbrella, AlertTriangle } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { MapPin, CalendarDays, ThumbsUp, User, Search } from "lucide-react";
 
 interface LocalInsight {
   id: number;
   city: string;
   category: string;
   content: string;
-  source: string;
-  lastUpdated: string;
+  author?: string;
+  date: string;
+  likes?: number;
+  source?: string;
 }
 
 const LocalInsights = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  
-  const { data: insights = [], isLoading } = useQuery({
-    queryKey: ['localInsights', selectedCity],
+
+  // Mock data - in a real application, this would come from the API
+  const mockInsights: LocalInsight[] = [
+    {
+      id: 1,
+      city: 'Paris',
+      category: 'Dining',
+      content: 'Skip the tourist restaurants near major attractions. Instead, try Rue Cler for authentic Parisian cafes and markets.',
+      author: 'Marie Dubois',
+      date: '2023-10-15',
+      likes: 42
+    },
+    {
+      id: 2,
+      city: 'Tokyo',
+      category: 'Transportation',
+      content: 'The Tokyo Metro passes are great, but consider getting a PASMO card for more flexibility with all transit systems.',
+      author: 'Takashi Yamamoto',
+      date: '2023-11-03',
+      likes: 36
+    },
+    {
+      id: 3,
+      city: 'New York',
+      category: 'Culture',
+      content: 'Many museums have "pay what you wish" hours on Friday evenings. Check their websites for details.',
+      author: 'Sarah Johnson',
+      date: '2023-09-28',
+      likes: 51
+    },
+    {
+      id: 4,
+      city: 'Rome',
+      category: 'Sightseeing',
+      content: 'To avoid the long lines at the Colosseum, buy your ticket at the Roman Forum entrance where lines are much shorter.',
+      author: 'Marco Rossi',
+      date: '2023-10-22',
+      likes: 67
+    },
+    {
+      id: 5,
+      city: 'Dubai',
+      category: 'Weather',
+      content: 'Current temperature is 32°C with clear skies. Best time to visit outdoor attractions is early morning or evening.',
+      source: 'Weather API',
+      date: '2023-12-01'
+    }
+  ];
+
+  const { data: insights = mockInsights, isLoading } = useQuery({
+    queryKey: ['localInsights'],
     queryFn: async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/insights', {
-          params: { city: selectedCity || undefined }
-        });
-        return response.data;
+        // In a real app, this would fetch from your backend
+        // const response = await axios.get('http://localhost:5000/api/insights');
+        // return response.data;
+        return mockInsights;
       } catch (error) {
-        console.error("Error fetching local insights:", error);
-        return [];
+        console.error("Error fetching insights:", error);
+        return mockInsights;
       }
     }
   });
-  
-  const { data: weatherData, isLoading: isLoadingWeather } = useQuery({
-    queryKey: ['weather', selectedCity],
-    queryFn: async () => {
-      if (!selectedCity) return null;
-      
-      try {
-        const response = await axios.get(`http://localhost:5000/api/weather/${selectedCity}`);
-        return response.data;
-      } catch (error) {
-        console.error("Error fetching weather data:", error);
-        return null;
-      }
-    },
-    enabled: !!selectedCity
-  });
-  
-  const filteredInsights = insights.filter((insight: LocalInsight) => 
+
+  const filteredInsights = insights.filter(insight => 
     insight.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    insight.content.toLowerCase().includes(searchQuery.toLowerCase())
+    insight.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    insight.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
-  const weatherIcons: Record<string, JSX.Element> = {
-    'Sunny': <div className="text-5xl">☀️</div>,
-    'Partly cloudy': <div className="text-5xl">⛅</div>,
-    'Cloudy': <div className="text-5xl">☁️</div>,
-    'Rain': <div className="text-5xl">🌧️</div>,
-    'Snow': <div className="text-5xl">❄️</div>,
-    'Thunderstorm': <div className="text-5xl">⛈️</div>,
-  };
-  
-  const getWeatherIcon = (condition: string) => {
-    return weatherIcons[condition] || <div className="text-5xl">☀️</div>;
-  };
-  
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-  
-  const popularCities = [
-    'Paris', 'Tokyo', 'New York', 'Rome', 'Bangkok', 'London', 'Barcelona', 'Sydney'
-  ];
+
+  const renderInsightCard = (insight: LocalInsight) => (
+    <Card key={insight.id} className="mb-4">
+      <CardHeader className="pb-2">
+        <div className="flex justify-between items-start">
+          <div>
+            <div className="flex items-center space-x-2 mb-1">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium">{insight.city}</span>
+              <span className="bg-secondary text-secondary-foreground text-xs px-2 py-0.5 rounded-full">
+                {insight.category}
+              </span>
+            </div>
+            <CardTitle className="text-base">{insight.content}</CardTitle>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="flex justify-between items-center text-sm text-muted-foreground">
+          <div className="flex items-center space-x-2">
+            {insight.author ? (
+              <>
+                <Avatar className="h-6 w-6">
+                  <AvatarFallback>{insight.author.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <span>{insight.author}</span>
+              </>
+            ) : (
+              <span>From {insight.source}</span>
+            )}
+            <span>•</span>
+            <div className="flex items-center">
+              <CalendarDays className="h-3 w-3 mr-1" />
+              {insight.date}
+            </div>
+          </div>
+          {insight.likes && (
+            <div className="flex items-center">
+              <ThumbsUp className="h-3 w-3 mr-1" />
+              {insight.likes}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Local Insights & Weather</h1>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
       
-      <div className="mb-8 relative">
-        <Input
-          type="text"
-          placeholder="Search for a city or keyword..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
-        />
-        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-      </div>
-      
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-3">Popular Destinations</h2>
-        <div className="flex flex-wrap gap-2">
-          {popularCities.map((city) => (
-            <button
-              key={city}
-              onClick={() => setSelectedCity(city)}
-              className={`px-4 py-2 rounded-full text-sm transition-colors ${
-                selectedCity === city
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted hover:bg-muted/80'
-              }`}
-            >
-              {city}
-            </button>
-          ))}
+      <main className="flex-grow container mx-auto py-8 px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold">Local Insights</h1>
+          <p className="text-muted-foreground">Discover insider tips and real-time information from locals and travelers</p>
         </div>
-      </div>
-      
-      {selectedCity && (
-        <Tabs defaultValue="weather" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="weather">Weather</TabsTrigger>
-            <TabsTrigger value="tips">Local Tips</TabsTrigger>
-            <TabsTrigger value="safety">Safety</TabsTrigger>
+        
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by city, category, or keyword..."
+            className="pl-10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        
+        <Tabs defaultValue="all">
+          <TabsList className="mb-6">
+            <TabsTrigger value="all">All Insights</TabsTrigger>
+            <TabsTrigger value="dining">Dining</TabsTrigger>
             <TabsTrigger value="transportation">Transportation</TabsTrigger>
-            <TabsTrigger value="food">Food</TabsTrigger>
+            <TabsTrigger value="culture">Culture</TabsTrigger>
+            <TabsTrigger value="weather">Weather</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="weather">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="md:col-span-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <MapPin className="mr-2 h-5 w-5" />
-                    Current Weather in {selectedCity}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {isLoadingWeather ? (
-                    <div className="text-center py-6">Loading weather data...</div>
-                  ) : weatherData ? (
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-4xl font-bold mb-2">{weatherData.current.temp_c}°C</div>
-                        <div className="text-lg text-muted-foreground">{weatherData.current.condition.text}</div>
-                        <div className="flex flex-wrap gap-x-4 gap-y-2 mt-4">
-                          <div className="flex items-center">
-                            <Thermometer className="mr-1 h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">Feels like {weatherData.current.feelslike_c}°C</span>
-                          </div>
-                          <div className="flex items-center">
-                            <Wind className="mr-1 h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{weatherData.current.wind_kph} km/h</span>
-                          </div>
-                          <div className="flex items-center">
-                            <CloudRain className="mr-1 h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{weatherData.current.precip_mm} mm</span>
-                          </div>
-                          <div className="flex items-center">
-                            <Umbrella className="mr-1 h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{weatherData.current.humidity}% humidity</span>
-                          </div>
-                        </div>
-                      </div>
-                      {getWeatherIcon(weatherData.current.condition.text)}
-                    </div>
-                  ) : (
-                    <div className="text-center py-6 text-muted-foreground">
-                      No weather data available for {selectedCity}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Forecast</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {isLoadingWeather ? (
-                    <div className="text-center py-6">Loading forecast...</div>
-                  ) : weatherData && weatherData.forecast ? (
-                    <div className="space-y-4">
-                      {weatherData.forecast.forecastday.map((day: any) => (
-                        <div key={day.date} className="flex justify-between items-center">
-                          <div>
-                            <div className="font-medium">{new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
-                            <div className="text-sm text-muted-foreground">{day.day.condition.text}</div>
-                          </div>
-                          <div className="flex items-center">
-                            <div className="text-sm mr-2">
-                              {day.day.mintemp_c}°-{day.day.maxtemp_c}°C
-                            </div>
-                            {getWeatherIcon(day.day.condition.text)}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-6 text-muted-foreground">
-                      No forecast data available
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+          <TabsContent value="all">
+            {isLoading ? (
+              <div className="text-center py-10">Loading insights...</div>
+            ) : filteredInsights.length > 0 ? (
+              filteredInsights.map(renderInsightCard)
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-muted-foreground">No insights found matching your search criteria.</p>
+              </div>
+            )}
           </TabsContent>
           
-          <TabsContent value="tips">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredInsights
-                .filter((insight: LocalInsight) => insight.category === 'Local Tips')
-                .map((insight: LocalInsight) => (
-                  <Card key={insight.id}>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{insight.city} Local Tips</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="mb-4">{insight.content}</p>
-                      <div className="text-sm text-muted-foreground mt-4">
-                        <p>Source: {insight.source || 'Local Expert'}</p>
-                        <p>Last updated: {formatDate(insight.lastUpdated)}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              
-              {filteredInsights.filter((insight: LocalInsight) => insight.category === 'Local Tips').length === 0 && (
-                <div className="col-span-2 text-center py-10 text-muted-foreground">
-                  No local tips available for {selectedCity}
-                </div>
-              )}
-            </div>
+          <TabsContent value="dining">
+            {isLoading ? (
+              <div className="text-center py-10">Loading insights...</div>
+            ) : filteredInsights.filter(i => i.category === 'Dining').length > 0 ? (
+              filteredInsights.filter(i => i.category === 'Dining').map(renderInsightCard)
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-muted-foreground">No dining insights found.</p>
+              </div>
+            )}
           </TabsContent>
           
-          <TabsContent value="safety">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredInsights
-                .filter((insight: LocalInsight) => insight.category === 'Safety')
-                .map((insight: LocalInsight) => (
-                  <Card key={insight.id}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <AlertTriangle className="mr-2 h-5 w-5" />
-                        {insight.city} Safety Information
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="mb-4">{insight.content}</p>
-                      <div className="text-sm text-muted-foreground mt-4">
-                        <p>Source: {insight.source || 'Travel Advisory'}</p>
-                        <p>Last updated: {formatDate(insight.lastUpdated)}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              
-              {filteredInsights.filter((insight: LocalInsight) => insight.category === 'Safety').length === 0 && (
-                <div className="col-span-2 text-center py-10 text-muted-foreground">
-                  No safety information available for {selectedCity}
-                </div>
-              )}
-            </div>
-          </TabsContent>
-          
+          {/* Similar TabsContent for other categories */}
           <TabsContent value="transportation">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredInsights
-                .filter((insight: LocalInsight) => insight.category === 'Transportation')
-                .map((insight: LocalInsight) => (
-                  <Card key={insight.id}>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{insight.city} Transportation Guide</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="mb-4">{insight.content}</p>
-                      <div className="text-sm text-muted-foreground mt-4">
-                        <p>Source: {insight.source || 'Local Transport Authority'}</p>
-                        <p>Last updated: {formatDate(insight.lastUpdated)}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              
-              {filteredInsights.filter((insight: LocalInsight) => insight.category === 'Transportation').length === 0 && (
-                <div className="col-span-2 text-center py-10 text-muted-foreground">
-                  No transportation information available for {selectedCity}
-                </div>
-              )}
-            </div>
+            {isLoading ? (
+              <div className="text-center py-10">Loading insights...</div>
+            ) : filteredInsights.filter(i => i.category === 'Transportation').length > 0 ? (
+              filteredInsights.filter(i => i.category === 'Transportation').map(renderInsightCard)
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-muted-foreground">No transportation insights found.</p>
+              </div>
+            )}
           </TabsContent>
           
-          <TabsContent value="food">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredInsights
-                .filter((insight: LocalInsight) => insight.category === 'Food')
-                .map((insight: LocalInsight) => (
-                  <Card key={insight.id}>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{insight.city} Food Guide</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="mb-4">{insight.content}</p>
-                      <div className="text-sm text-muted-foreground mt-4">
-                        <p>Source: {insight.source || 'Local Food Expert'}</p>
-                        <p>Last updated: {formatDate(insight.lastUpdated)}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              
-              {filteredInsights.filter((insight: LocalInsight) => insight.category === 'Food').length === 0 && (
-                <div className="col-span-2 text-center py-10 text-muted-foreground">
-                  No food guide available for {selectedCity}
-                </div>
-              )}
-            </div>
+          <TabsContent value="culture">
+            {isLoading ? (
+              <div className="text-center py-10">Loading insights...</div>
+            ) : filteredInsights.filter(i => i.category === 'Culture').length > 0 ? (
+              filteredInsights.filter(i => i.category === 'Culture').map(renderInsightCard)
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-muted-foreground">No culture insights found.</p>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="weather">
+            {isLoading ? (
+              <div className="text-center py-10">Loading insights...</div>
+            ) : filteredInsights.filter(i => i.category === 'Weather').length > 0 ? (
+              filteredInsights.filter(i => i.category === 'Weather').map(renderInsightCard)
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-muted-foreground">No weather insights found.</p>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
-      )}
+      </main>
       
-      {!selectedCity && (
-        <div className="text-center py-10">
-          <p className="text-muted-foreground mb-4">Select a city to view local insights and weather information</p>
-        </div>
-      )}
+      <Footer />
     </div>
   );
 };

@@ -1,117 +1,131 @@
 
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, Map, BarChart2, Users, Settings } from 'lucide-react';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
-
-  const navItems = [
-    { name: 'Explore', path: '/', icon: Map },
-    { name: 'Dashboard', path: '/dashboard', icon: Map },
-    { name: 'Budget', path: '/budget', icon: BarChart2 },
-    { name: 'Community', path: '/community', icon: Users },
-    { name: 'Profile', path: '/profile', icon: User },
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || isMobileMenuOpen ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
-      }`}
-    >
-      <nav className="container mx-auto container-padding py-4 flex items-center justify-between">
-        {/* Logo */}
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+      <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-display font-bold text-primary">TripGenius</span>
+          <span className="text-xl font-bold">WanderPlan</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={`relative font-medium text-sm transition-colors duration-200 ${
-                location.pathname === item.path
-                  ? 'text-primary'
-                  : 'text-foreground/70 hover:text-foreground'
-              }`}
-            >
-              {item.name}
-              {location.pathname === item.path && (
-                <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full" />
-              )}
-            </Link>
-          ))}
-        </div>
+        <NavigationMenu className="hidden md:block">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link to="/plan-trip" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Plan a Trip
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/dashboard" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Dashboard
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/local-insights" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Local Insights
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/community" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Community
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
 
-        {/* Sign In/Up Buttons */}
-        <div className="hidden md:flex items-center space-x-4">
-          <button className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200">
-            Sign In
-          </button>
-          <button className="btn-primary text-sm">
-            Sign Up
-          </button>
-        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="default" className="hidden md:flex">
+            <Link to="/plan-trip">Plan Your Trip</Link>
+          </Button>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-foreground focus:outline-none"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </nav>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white/90 backdrop-blur-md shadow-md animate-slide-down">
-          <div className="container mx-auto py-4 px-6 space-y-4">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${
-                    location.pathname === item.path
-                      ? 'bg-accent text-primary font-medium'
-                      : 'text-foreground/70 hover:bg-muted'
-                  }`}
+          {/* Mobile Menu Trigger */}
+          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="flex flex-col p-6">
+              <SheetClose asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-4 top-4"
                 >
-                  <Icon size={18} />
-                  {item.name}
-                </Link>
-              );
-            })}
-            <div className="pt-4 border-t border-border flex flex-col space-y-3">
-              <button className="btn-outline w-full">Sign In</button>
-              <button className="btn-primary w-full">Sign Up</button>
-            </div>
-          </div>
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Close menu</span>
+                </Button>
+              </SheetClose>
+              <nav className="mt-8 flex flex-col gap-4">
+                <SheetClose asChild>
+                  <Link to="/">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Home
+                    </Button>
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/plan-trip">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Plan a Trip
+                    </Button>
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/dashboard">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Dashboard
+                    </Button>
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/local-insights">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Local Insights
+                    </Button>
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link to="/community">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Community
+                    </Button>
+                  </Link>
+                </SheetClose>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
-      )}
+      </div>
     </header>
   );
 };

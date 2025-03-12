@@ -1,0 +1,60 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "community_trips",
+  "info": {
+    "singularName": "community-trip",
+    "pluralName": "community-trips",
+    "displayName": "Community Trip",
+    "description": "User submitted travel experiences shared with the community"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    },
+    "destination": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected"
+      ],
+      "default": "Pending"
+    },
+    "tags": {
+      "type": "json"
+    },
+    "author": {
+      "type": "string"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "travelDates": {
+      "type": "json"
+    },
+    "likes": {
+      "type": "integer",
+      "default": 0
+    },
+    "comments": {
+      "type": "json"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+
+{
+  "kind": "collectionType",
+  "collectionName": "local_insights",
+  "info": {
+    "singularName": "local-insight",
+    "pluralName": "local-insights",
+    "displayName": "Local Insight",
+    "description": "Local information and weather updates for destinations"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "city": {
+      "type": "string",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Weather",
+        "Local Tips",
+        "Safety",
+        "Transportation",
+        "Food"
+      ],
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "source": {
+      "type": "string"
+    },
+    "lastUpdated": {
+      "type": "datetime"
+    }
+  }
+}

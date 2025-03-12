@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "itineraries",
+  "info": {
+    "singularName": "itinerary",
+    "pluralName": "itineraries",
+    "displayName": "Itinerary"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "destinations": {
+      "type": "text"
+    },
+    "dates": {
+      "type": "json"
+    },
+    "budget": {
+      "type": "biginteger"
+    },
+    "dailyPlan": {
+      "type": "json"
+    },
+    "tags": {
+      "type": "enumeration",
+      "enum": [
+        "nature"
+      ]
+    }
+  }
+}

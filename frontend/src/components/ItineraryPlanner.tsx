@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import axios from 'axios';
 import { Clock, MapPin, Utensils, Hotel, Ticket, Car, Plus, Trash2 } from 'lucide-react';
 
 interface ItineraryDay {
@@ -110,6 +111,15 @@ const ItineraryPlanner = () => {
         return 'bg-green-100 text-green-600';
       default:
         return 'bg-gray-100 text-gray-600';
+    }
+  };
+
+  const generateItinerary = async (formData) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/itineraries/generate', formData);
+      setItinerary(response.data);
+    } catch (error) {
+      console.error('Error generating itinerary:', error);
     }
   };
   

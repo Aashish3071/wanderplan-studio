@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { ToastProvider } from '@/components/toast/ToastContext';
 import { Layout } from '@/components/layout/Layout';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
@@ -55,7 +56,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <SessionProvider session={pageProps.session}>
-      <ThemeProvider>{getLayout(<Component {...pageProps} />)}</ThemeProvider>
+      <ThemeProvider>
+        <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

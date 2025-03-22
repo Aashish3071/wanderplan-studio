@@ -1,0 +1,289 @@
+{
+  "summary": "A 5-day adventure in Paris exploring the best local sights, cuisine, and culture. This itinerary is tailored for art, history, food enthusiasts with a moderate budget.",
+  "mapCenter": {
+    "lat": 48.8566,
+    "lng": 2.3522
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2023-10-01",
+      "title": "Arrival and Museums",
+      "activities": [
+        {
+          "title": "Morning at the Louvre",
+          "description": "Explore one of the world's largest art museums, home to thousands of works including the Mona Lisa.",
+          "location": "Musée du Louvre",
+          "coordinates": {
+            "lat": 48.8606,
+            "lng": 2.3376
+          },
+          "time": "09:00 - 12:00",
+          "cost": 15,
+          "imageUrl": "/images/itinerary/louvre.jpg"
+        },
+        {
+          "title": "Lunch at Café Marly",
+          "description": "Enjoy French cuisine with a view of the Louvre's courtyard and pyramid.",
+          "location": "Café Marly",
+          "coordinates": {
+            "lat": 48.8631,
+            "lng": 2.3353
+          },
+          "time": "12:30 - 14:00",
+          "cost": 32,
+          "imageUrl": "/images/itinerary/cafe.jpg"
+        },
+        {
+          "title": "Seine River Cruise",
+          "description": "Relax on a boat cruise along the Seine River, viewing Paris's iconic landmarks from the water.",
+          "location": "Bateaux Parisiens",
+          "coordinates": {
+            "lat": 48.853,
+            "lng": 2.3499
+          },
+          "time": "15:00 - 16:30",
+          "cost": 14,
+          "imageUrl": "/images/itinerary/seine.jpg"
+        },
+        {
+          "title": "Dinner in Le Marais",
+          "description": "Experience the vibrant neighborhood of Le Marais and enjoy dinner at a traditional bistro.",
+          "location": "Le Marais",
+          "coordinates": {
+            "lat": 48.8559,
+            "lng": 2.3584
+          },
+          "time": "19:00 - 21:00",
+          "cost": 41,
+          "imageUrl": "/images/itinerary/bistro.jpg"
+        }
+      ],
+      "imageUrl": "/images/itinerary/paris1.jpg"
+    },
+    {
+      "day": 2,
+      "date": "2023-10-02",
+      "title": "Impressionist Art and Latin Quarter",
+      "activities": [
+        {
+          "title": "Morning at Musée d'Orsay",
+          "description": "Visit the Musée d'Orsay, housed in the former Orsay railway station, and known for its collection of impressionist art.",
+          "location": "Musée d'Orsay",
+          "coordinates": {
+            "lat": 48.86,
+            "lng": 2.3266
+          },
+          "time": "09:00 - 12:00",
+          "cost": 17,
+          "imageUrl": "/images/itinerary/orsay.jpg"
+        },
+        {
+          "title": "Lunch at Café Marly",
+          "description": "Enjoy French cuisine with a view of the Louvre's courtyard and pyramid.",
+          "location": "Café Marly",
+          "coordinates": {
+            "lat": 48.8631,
+            "lng": 2.3353
+          },
+          "time": "12:30 - 14:00",
+          "cost": 35,
+          "imageUrl": "/images/itinerary/cafe.jpg"
+        },
+        {
+          "title": "Seine River Cruise",
+          "description": "Relax on a boat cruise along the Seine River, viewing Paris's iconic landmarks from the water.",
+          "location": "Bateaux Parisiens",
+          "coordinates": {
+            "lat": 48.853,
+            "lng": 2.3499
+          },
+          "time": "15:00 - 16:30",
+          "cost": 15,
+          "imageUrl": "/images/itinerary/seine.jpg"
+        },
+        {
+          "title": "Dinner in Le Marais",
+          "description": "Experience the vibrant neighborhood of Le Marais and enjoy dinner at a traditional bistro.",
+          "location": "Le Marais",
+          "coordinates": {
+            "lat": 48.8559,
+            "lng": 2.3584
+          },
+          "time": "19:00 - 21:00",
+          "cost": 45,
+          "imageUrl": "/images/itinerary/bistro.jpg"
+        }
+      ],
+      "imageUrl": "/images/itinerary/paris2.jpg"
+    },
+    {
+      "day": 3,
+      "date": "2023-10-03",
+      "title": "Montmartre and Northern Paris",
+      "activities": [
+        {
+          "title": "Morning at Montmartre",
+          "description": "Explore the charming hilltop neighborhood of Montmartre, known for its artistic history and the beautiful Sacré-Cœur Basilica.",
+          "location": "Montmartre",
+          "coordinates": {
+            "lat": 48.8867,
+            "lng": 2.3431
+          },
+          "time": "09:00 - 12:00",
+          "cost": 19,
+          "imageUrl": "/images/itinerary/montmartre.jpg"
+        },
+        {
+          "title": "Lunch at Café Marly",
+          "description": "Enjoy French cuisine with a view of the Louvre's courtyard and pyramid.",
+          "location": "Café Marly",
+          "coordinates": {
+            "lat": 48.8631,
+            "lng": 2.3353
+          },
+          "time": "12:30 - 14:00",
+          "cost": 39,
+          "imageUrl": "/images/itinerary/cafe.jpg"
+        },
+        {
+          "title": "Seine River Cruise",
+          "description": "Relax on a boat cruise along the Seine River, viewing Paris's iconic landmarks from the water.",
+          "location": "Bateaux Parisiens",
+          "coordinates": {
+            "lat": 48.853,
+            "lng": 2.3499
+          },
+          "time": "15:00 - 16:30",
+          "cost": 17,
+          "imageUrl": "/images/itinerary/seine.jpg"
+        },
+        {
+          "title": "Dinner in Le Marais",
+          "description": "Experience the vibrant neighborhood of Le Marais and enjoy dinner at a traditional bistro.",
+          "location": "Le Marais",
+          "coordinates": {
+            "lat": 48.8559,
+            "lng": 2.3584
+          },
+          "time": "19:00 - 21:00",
+          "cost": 50,
+          "imageUrl": "/images/itinerary/bistro.jpg"
+        }
+      ],
+      "imageUrl": "/images/itinerary/paris3.jpg"
+    },
+    {
+      "day": 4,
+      "date": "2023-10-04",
+      "title": "Eiffel Tower and Champs-Élysées",
+      "activities": [
+        {
+          "title": "Morning at Eiffel Tower",
+          "description": "Visit the iconic Eiffel Tower, one of the world's most recognized landmarks and enjoy panoramic views of Paris.",
+          "location": "Eiffel Tower",
+          "coordinates": {
+            "lat": 48.8584,
+            "lng": 2.2945
+          },
+          "time": "09:00 - 12:00",
+          "cost": 20,
+          "imageUrl": "/images/itinerary/eiffel.jpg"
+        },
+        {
+          "title": "Lunch at Café Marly",
+          "description": "Enjoy French cuisine with a view of the Louvre's courtyard and pyramid.",
+          "location": "Café Marly",
+          "coordinates": {
+            "lat": 48.8631,
+            "lng": 2.3353
+          },
+          "time": "12:30 - 14:00",
+          "cost": 42,
+          "imageUrl": "/images/itinerary/cafe.jpg"
+        },
+        {
+          "title": "Seine River Cruise",
+          "description": "Relax on a boat cruise along the Seine River, viewing Paris's iconic landmarks from the water.",
+          "location": "Bateaux Parisiens",
+          "coordinates": {
+            "lat": 48.853,
+            "lng": 2.3499
+          },
+          "time": "15:00 - 16:30",
+          "cost": 18,
+          "imageUrl": "/images/itinerary/seine.jpg"
+        },
+        {
+          "title": "Dinner in Le Marais",
+          "description": "Experience the vibrant neighborhood of Le Marais and enjoy dinner at a traditional bistro.",
+          "location": "Le Marais",
+          "coordinates": {
+            "lat": 48.8559,
+            "lng": 2.3584
+          },
+          "time": "19:00 - 21:00",
+          "cost": 54,
+          "imageUrl": "/images/itinerary/bistro.jpg"
+        }
+      ],
+      "imageUrl": "/images/itinerary/paris4.jpg"
+    },
+    {
+      "day": 5,
+      "date": "2023-10-05",
+      "title": "Day Trip to Versailles",
+      "activities": [
+        {
+          "title": "Morning at Versailles",
+          "description": "Take a day trip to the Palace of Versailles, the former royal residence known for its opulent décor, Hall of Mirrors, and expansive gardens.",
+          "location": "Palace of Versailles",
+          "coordinates": {
+            "lat": 48.8049,
+            "lng": 2.1204
+          },
+          "time": "09:00 - 12:00",
+          "cost": 22,
+          "imageUrl": "/images/itinerary/versailles.jpg"
+        },
+        {
+          "title": "Lunch at Café Marly",
+          "description": "Enjoy French cuisine with a view of the Louvre's courtyard and pyramid.",
+          "location": "Café Marly",
+          "coordinates": {
+            "lat": 48.8631,
+            "lng": 2.3353
+          },
+          "time": "12:30 - 14:00",
+          "cost": 46,
+          "imageUrl": "/images/itinerary/cafe.jpg"
+        },
+        {
+          "title": "Seine River Cruise",
+          "description": "Relax on a boat cruise along the Seine River, viewing Paris's iconic landmarks from the water.",
+          "location": "Bateaux Parisiens",
+          "coordinates": {
+            "lat": 48.853,
+            "lng": 2.3499
+          },
+          "time": "15:00 - 16:30",
+          "cost": 20,
+          "imageUrl": "/images/itinerary/seine.jpg"
+        },
+        {
+          "title": "Dinner in Le Marais",
+          "description": "Experience the vibrant neighborhood of Le Marais and enjoy dinner at a traditional bistro.",
+          "location": "Le Marais",
+          "coordinates": {
+            "lat": 48.8559,
+            "lng": 2.3584
+          },
+          "time": "19:00 - 21:00",
+          "cost": 59,
+          "imageUrl": "/images/itinerary/bistro.jpg"
+        }
+      ],
+      "imageUrl": "/images/itinerary/paris5.jpg"
+    }
+  ]
+}

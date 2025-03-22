@@ -22,6 +22,8 @@ import {
   ExternalLink,
   Heart,
   HelpCircle,
+  Sparkles,
+  FlaskConical,
 } from 'lucide-react';
 
 const Navbar = () => {
@@ -30,6 +32,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Track scroll position for navbar appearance
   useEffect(() => {
@@ -45,7 +48,18 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    // Close sidebar when profile menu is toggled
+    if (isSidebarOpen) setIsSidebarOpen(false);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+    // Close profile menu when sidebar is toggled
+    if (isMenuOpen) setIsMenuOpen(false);
+  };
+
   const toggleResources = () => setIsResourcesOpen(!isResourcesOpen);
 
   const navigation = [
@@ -53,7 +67,9 @@ const Navbar = () => {
     { name: 'Dashboard', href: '/dashboard', icon: Briefcase },
     { name: 'Discover', href: '/discover', icon: Compass },
     { name: 'Plan', href: '/plan', icon: Calendar },
+    { name: 'AI Planner', href: '/plan/ai', icon: Sparkles },
     { name: 'Trips', href: '/trips', icon: Globe },
+    { name: 'Test Itinerary', href: '/test-itinerary', icon: FlaskConical },
   ];
 
   const resourceLinks = [
@@ -194,7 +210,7 @@ const Navbar = () => {
 
                   {/* Profile dropdown panel */}
                   {isMenuOpen && (
-                    <div className="absolute right-0 z-10 mt-2 w-60 rounded-xl border border-border/50 bg-white py-2 shadow-xl duration-200 animate-in fade-in slide-in-from-top-5">
+                    <div className="absolute right-0 z-30 mt-2 w-60 rounded-xl border border-border/50 bg-white py-2 shadow-xl duration-200 animate-in fade-in slide-in-from-top-5">
                       <div className="border-b border-border/50 px-4 py-2">
                         <p className="text-sm font-medium text-foreground">{session.user?.name}</p>
                         <p className="truncate text-xs text-muted-foreground">
@@ -280,9 +296,9 @@ const Navbar = () => {
             {/* Mobile menu button */}
             <button
               className="inline-flex items-center justify-center rounded-md p-2 text-foreground/70 hover:bg-foreground/5 hover:text-foreground focus:outline-none lg:hidden"
-              onClick={toggleMenu}
+              onClick={toggleSidebar}
             >
-              {isMenuOpen ? (
+              {isSidebarOpen ? (
                 <X className="h-6 w-6" aria-hidden="true" />
               ) : (
                 <Menu className="h-6 w-6" aria-hidden="true" />
@@ -293,10 +309,10 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu, show/hide based on menu state */}
-      {isMenuOpen && (
-        <div className="lg:hidden">
-          <div className="container-custom border-t border-border/30 pb-3 pt-2">
-            <div className="space-y-1">
+      {isSidebarOpen && (
+        <div className="absolute left-0 right-0 top-16 z-20 border-b border-gray-200 bg-white/95 shadow-lg backdrop-blur-sm lg:hidden">
+          <div className="container-custom py-3">
+            <div className="space-y-1.5">
               {navigation.map((item) => {
                 const isActive =
                   router.pathname === item.href || router.pathname.startsWith(`${item.href}/`);
@@ -304,12 +320,12 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`flex items-center rounded-lg px-3 py-2 font-medium ${
+                    className={`flex items-center rounded-lg px-4 py-2.5 font-medium ${
                       isActive
                         ? 'bg-primary/10 text-primary'
                         : 'text-foreground/80 hover:bg-foreground/5 hover:text-foreground'
                     }`}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     <item.icon className="mr-3 h-5 w-5" />
                     {item.name}
@@ -318,16 +334,16 @@ const Navbar = () => {
               })}
 
               {/* Resources section in mobile menu */}
-              <div className="mt-2 border-t border-border/30 pt-2">
-                <h3 className="px-3 pb-1 text-xs uppercase tracking-wider text-muted-foreground">
+              <div className="mt-3 border-t border-border/30 pt-3">
+                <h3 className="px-4 pb-1 text-xs uppercase tracking-wider text-muted-foreground">
                   Resources
                 </h3>
                 {resourceLinks.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="flex items-center rounded-lg px-3 py-2 text-foreground/80 hover:bg-foreground/5 hover:text-foreground"
-                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center rounded-lg px-4 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-foreground"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     <item.icon className="mr-3 h-5 w-5 text-secondary" />
                     {item.name}
@@ -338,8 +354,8 @@ const Navbar = () => {
               {session && (
                 <Link
                   href="/trips/new"
-                  className="bg-gradient-primary mt-3 flex items-center rounded-lg px-3 py-2.5 font-medium text-white"
-                  onClick={() => setIsMenuOpen(false)}
+                  className="bg-gradient-primary mt-4 flex items-center rounded-lg px-4 py-3 font-medium text-white"
+                  onClick={() => setIsSidebarOpen(false)}
                 >
                   <Plus className="mr-3 h-5 w-5" />
                   Create New Trip
@@ -347,19 +363,21 @@ const Navbar = () => {
               )}
 
               {!session && (
-                <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border/30 pt-3">
+                <div className="mt-4 grid grid-cols-2 gap-3 border-t border-border/30 pt-4">
                   <Link
                     href="/auth/login"
-                    className="flex items-center justify-center rounded-lg border border-primary px-3 py-2 text-center font-medium text-primary"
-                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center rounded-lg border border-primary px-3 py-2.5 text-center font-medium text-primary"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
+                    <LogIn className="mr-2 h-4 w-4" />
                     Log In
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="flex items-center justify-center rounded-lg bg-primary px-3 py-2 text-center font-medium text-white"
-                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-center font-medium text-white"
+                    onClick={() => setIsSidebarOpen(false)}
                   >
+                    <UserPlus className="mr-2 h-4 w-4" />
                     Sign Up
                   </Link>
                 </div>

@@ -1,0 +1,251 @@
+      // If we're already showing the preview, create the actual trip
+      await createTrip();
+    } else {
+      // Generate preview first
+      await generatePreview();
+    }
+  };
+
+  const validateDateRange = () => {
+    if (!formData.startDate || !formData.endDate) return true;
+    const start = new Date(formData.startDate);
+    const end = new Date(formData.endDate);
+    return start <= end;
+  };
+
+  const applyRecommendedDates = () => {
+    if (!formData.destination) return;
+    const recommended = recommendTravelDates(formData.destination);
+    setFormData((prev) => ({
+      ...prev,
+      startDate: recommended.startDate,
+      endDate: recommended.endDate,
+    }));
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-12">
+      {/* Enhanced Hero Section with Background Image */}
+      <div className="relative overflow-hidden" style={{ height: isMobile ? '250px' : '350px' }}>
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1488085061387-422e29b40080?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
+          }}
+        ></div>
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-primary/40 to-primary/30"></div>
+
+        <div className="container relative mx-auto flex h-full flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h1 className="text-3xl font-extrabold tracking-tight text-white drop-shadow-md sm:text-4xl lg:text-5xl">
+              Your Dream Trip, <span className="text-yellow-300">Planned in Minutes</span>
+            </h1>
+            <p className="mt-4 text-base text-white/90 drop-shadow sm:text-lg">
+              Let our AI travel assistant create a personalized itinerary just for you.
+              <br className="hidden sm:inline" />
+              <span className="font-medium">No more hours of research!</span>
+            </p>
+
+            <div className="mt-6 flex justify-center space-x-3">
+              <div className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm">
+                <CheckCircle className="mr-2 h-4 w-4 text-green-300" />
+                <span>100% Personalized</span>
+              </div>
+
+              <div className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm">
+                <CheckCircle className="mr-2 h-4 w-4 text-green-300" />
+                <span>AI-Powered</span>
+              </div>
+
+              <div className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm">
+                <CheckCircle className="mr-2 h-4 w-4 text-green-300" />
+                <span>Instant</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto -mt-4 px-4 py-4 sm:px-6 lg:px-8">
+        {/* Form or Preview */}
+        <div id="trip-form" className="mx-auto max-w-3xl scroll-mt-8">
+          {showPreview && itineraryPreview ? (
+            <div className="overflow-hidden rounded-lg bg-white shadow">
+              <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-medium text-gray-900 sm:text-xl">
+                    Your Trip Preview
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setShowPreview(false)}
+                    className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <EyeOff className="mr-2 h-4 w-4" />
+                    Back to Form
+                  </button>
+                </div>
+
+                {/* Trip Overview with Hero Image */}
+                <div className="relative overflow-hidden rounded-xl">
+                  {itineraryPreview.heroImage && (
+                    <div className="relative h-48 w-full sm:h-64">
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${itineraryPreview.heroImage})` }}
+                      ></div>
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60"></div>
+                      <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6">
+                        <h3 className="text-2xl font-bold text-white">
+                          {itineraryPreview.destination}
+                        </h3>
+                        <p className="mt-1 text-sm text-white/90">
+                          {new Date(itineraryPreview.startDate).toLocaleDateString()} -{' '}
+                          {new Date(itineraryPreview.endDate).toLocaleDateString()}
+                        </p>
+                        <div className="mt-2 inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm text-white backdrop-blur-sm">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          <span>{itineraryPreview.days.length} Days</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="rounded-md bg-gray-50 p-4 mt-4">
+                    <div className="flex items-start space-x-2">
+                      <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                      <div className="text-sm text-gray-700">{itineraryPreview.summary}</div>
+                    </div>
+                    
+                    {itineraryPreview.budgetUsed && itineraryPreview.totalBudget && (
+                      <div className="mt-3 border-t border-gray-200 pt-3 flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-700">Estimated Budget:</span>
+                        <span className="text-sm font-medium text-primary">
+                          ${itineraryPreview.budgetUsed} 
+                          <span className="text-gray-500 text-xs ml-1">
+                            of ${itineraryPreview.totalBudget}
+                          </span>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Trip Map View */}
+                <div className="mt-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-gray-900">Trip Map</h3>
+                    <div className="inline-flex items-center text-xs text-gray-500">
+                      <Navigation className="mr-1 h-4 w-4" />
+                      <span>Interactive locations map</span>
+                    </div>
+                  </div>
+
+                  <div className="h-[400px] overflow-hidden rounded-xl border border-gray-200">
+                    <TripMap
+                      center={itineraryPreview.mapCenter}
+                      locations={
+                        itineraryPreview.days.flatMap((day) =>
+                          day.activities
+                            .filter(activity => activity.coordinates && activity.location)
+                            .map((activity) => ({
+                              title: activity.title,
+                              location: activity.location || '',
+                              coordinates: activity.coordinates || { lat: 0, lng: 0 },
+                              imageUrl: activity.imageUrl,
+                              day: day.day,
+                              time: activity.time
+                            }))
+                      )
+                    }
+                    height="400px"
+                    showInfoOnHover={true}
+                  />
+                </div>
+              </div>
+
+              {/* Interactive Timeline */}
+              <div className="mt-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Your Itinerary</h3>
+                <div className="space-y-6">
+                  {itineraryPreview.days.map((day) => (
+                    <div key={day.day} className="rounded-xl border border-gray-200 overflow-hidden">
+                      {/* Day Header with Image */}
+                      <div className="relative h-28 w-full">
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center" 
+                          style={{ backgroundImage: `url(${day.imageUrl})` }}
+                        ></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-black/50"></div>
+                        <div className="absolute inset-0 flex flex-col justify-center p-4">
+                          <h4 className="text-xl font-semibold text-white">
+                            Day {day.day}: {day.title}
+                          </h4>
+                          <p className="text-sm text-white/90">{day.date}</p>
+                        </div>
+                      </div>
+
+                      {/* Day Activities */}
+                      <div className="divide-y divide-gray-200">
+                        {day.activities.map((activity, idx) => (
+                          <div key={idx} className="p-4 hover:bg-gray-50 transition-colors">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+                              {/* Activity Image */}
+                              {activity.imageUrl && (
+                                <div className="relative flex-shrink-0 rounded-md overflow-hidden h-20 w-20 sm:h-24 sm:w-24 mb-2 sm:mb-0">
+                                  <img 
+                                    src={activity.imageUrl} 
+                                    alt={activity.title}
+                                    className="h-full w-full object-cover" 
+                                  />
+                                </div>
+                              )}
+                              
+                              {/* Activity Details */}
+                              <div className="flex-1">
+                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                                  <h5 className="text-md font-medium text-gray-900">
+                                    {activity.title}
+                                  </h5>
+                                  <div className="flex items-center mt-1 sm:mt-0 text-xs text-gray-500">
+                                    <Clock className="mr-1 h-3.5 w-3.5" />
+                                    {activity.time}
+                                  </div>
+                                </div>
+                                
+                                {activity.location && (
+                                  <div className="mt-1 flex items-center text-xs text-gray-500">
+                                    <MapPinned className="mr-1 h-3.5 w-3.5" />
+                                    {activity.location}
+                                  </div>
+                                )}
+                                
+                                <p className="mt-2 text-sm text-gray-700">{activity.description}</p>
+                                
+                                {activity.cost > 0 && (
+                                  <div className="mt-2 flex items-center text-xs text-primary">
+                                    <DollarSign className="mr-1 h-3.5 w-3.5" />
+                                    <span>Estimated cost: ${activity.cost}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end sm:space-x-4">
+                <button
+                  type="button"
+                  onClick={() => setShowPreview(false)}
+                  className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  Edit Trip

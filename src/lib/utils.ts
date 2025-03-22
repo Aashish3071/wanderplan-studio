@@ -23,10 +23,16 @@ export function formatDateString(dateString: string): string {
 /**
  * Format currency value
  */
-export function formatCurrency(value: number, currency: string = 'USD'): string {
+export function formatCurrency(
+  value: number,
+  currency: string = 'USD',
+  minimumFractionDigits: number = 0
+): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
+    minimumFractionDigits,
+    maximumFractionDigits: minimumFractionDigits,
   }).format(value);
 }
 
@@ -35,4 +41,18 @@ export function formatCurrency(value: number, currency: string = 'USD'): string 
  */
 export function generateId(): string {
   return Math.random().toString(36).substring(2, 15);
+}
+
+export function getGoogleApiKey(): string {
+  return process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
+}
+
+export function isValidCoordinates(coords: any): boolean {
+  if (!coords || typeof coords !== 'object') return false;
+
+  const { lat, lng } = coords;
+  if (typeof lat !== 'number' || typeof lng !== 'number') return false;
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return false;
+
+  return true;
 }

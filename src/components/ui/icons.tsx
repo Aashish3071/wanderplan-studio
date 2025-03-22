@@ -21,7 +21,7 @@ import {
   User,
   Bell,
   PlusCircle,
-} from "lucide-react";
+} from 'lucide-react';
 
 export type IconProps = LucideProps;
 

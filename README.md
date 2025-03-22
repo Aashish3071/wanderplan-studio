@@ -30,31 +30,47 @@ A travel planning platform with interactive 3D maps, AI-powered itinerary genera
 ### Installation
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/yourusername/wanderplan-studio.git
    cd wanderplan-studio
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
 
 3. Set up environment variables:
+
    - Copy `.env.example` to `.env.local`
    - Fill in your database credentials and API keys
 
 4. Set up the database:
+
    ```
    npx prisma db push
    ```
 
 5. Start the development server:
+
    ```
    npm run dev
    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## API Documentation
+
+For detailed information about the AI integrations, authentication setup, and database models, please see [README-API.md](README-API.md).
+
+### Testing the AI Features
+
+You can test the AI-powered itinerary generation without an API key:
+
+1. Run `npm run generate-mock` to create sample data
+2. Visit `/test-itinerary` to see a simulated AI-generated travel plan
 
 ## Project Structure
 
@@ -72,4 +88,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
